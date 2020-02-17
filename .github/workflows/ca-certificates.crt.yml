@@ -1,0 +1,38 @@
+#=================================================
+# https://github.com/P3TERX/ca-certificates.crt
+# Description: Publish ca-certificates.crt
+# Lisence: MIT
+# Author: P3TERX
+# Blog: https://p3terx.com
+#=================================================
+
+name: Publish ca-certificates.crt
+
+on:
+  schedule:
+    - cron: 0 22 * * *
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      TZ: Asia/Shanghai
+
+    steps:
+    - name: Make ca-certificates.crt
+      run: |
+        wget -N https://raw.githubusercontent.com/curl/curl/master/lib/mk-ca-bundle.pl
+        chmod +x mk-ca-bundle.pl
+        ./mk-ca-bundle.pl
+        mv ca-bundle.crt ca-certificates.crt
+        echo ::set-env name=SHA256SUM::"$(sha256sum ca-certificates.crt | awk '{ print $1 }')"
+        echo ::set-env name=RELEASE_TAG::"$(date +"%Y.%m.%d")"
+
+    - name: Publish release
+      uses: softprops/action-gh-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+      with:
+        tag_name: ${{ env.RELEASE_TAG }}
+        body: "sha256sum: `${{ env.SHA256SUM }}`"
+        files: ca-certificates.crt
