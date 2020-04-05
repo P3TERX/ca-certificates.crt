@@ -9,7 +9,7 @@ Make ca-certificates.crt daily via GitHub Actions
 
 ## Downloads
 
-[![GitHub release (latest by date)](https://img.shields.io/github/v/release/P3TERX/ca-certificates.crt?style=for-the-badge)](https://github.com/P3TERX/ca-certificates.crt/releases/latest)
+[ca-certificates.crt](https://cdn.jsdelivr.net/gh/P3TERX/ca-certificates.crt@download/ca-certificates.crt)
 
 ## Update ca-certificates.crt with a script
 
