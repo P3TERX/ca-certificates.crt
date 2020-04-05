@@ -9,14 +9,14 @@
 name: Publish ca-certificates.crt
 
 on:
+  repository_dispatch:
   schedule:
     - cron: 0 22 * * *
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    env:
-      TZ: Asia/Shanghai
+    timeout-minutes: 5
 
     steps:
     - name: Make ca-certificates.crt
@@ -24,15 +24,18 @@ jobs:
         wget -N https://raw.githubusercontent.com/curl/curl/master/lib/mk-ca-bundle.pl
         chmod +x mk-ca-bundle.pl
         ./mk-ca-bundle.pl
-        mv ca-bundle.crt ca-certificates.crt
-        echo ::set-env name=SHA256SUM::"$(sha256sum ca-certificates.crt | awk '{ print $1 }')"
-        echo ::set-env name=RELEASE_TAG::"$(date +"%Y.%m.%d")"
+        mkdir -p upload
+        cp -v ca-bundle.crt upload/ca-certificates.crt
 
-    - name: Publish release
-      uses: softprops/action-gh-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
-      with:
-        tag_name: ${{ env.RELEASE_TAG }}
-        body: "sha256sum: `${{ env.SHA256SUM }}`"
-        files: ca-certificates.crt
+    - name: Push to "download" branch
+      run: |
+        cd upload
+        echo $(sha256sum *) > sha256sum
+        git init
+        git config user.name "${{ github.actor }}"
+        git config user.email "${{ github.actor }}@users.noreply.github.com"
+        git checkout -b download
+        git add .
+        git commit -m "$(date +"%Y.%m.%d")"
+        git remote add origin "https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}"
+        git push -f origin download
