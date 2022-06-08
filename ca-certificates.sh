@@ -32,9 +32,16 @@ else
 fi
 
 echo -e "${INFO} Doanload ca-certificates.crt ..."
-${DOWNLOADER} https://raw.githubusercontent.com/P3TERX/ca-certificates.crt/download/ca-certificates.crt ||
-    ${DOWNLOADER} https://cdn.jsdelivr.net/gh/P3TERX/ca-certificates.crt@download/ca-certificates.crt ||
-    ${DOWNLOADER} https://gh.p3terx.workers.dev/ca-certificates.crt/download/ca-certificates.crt
+${DOWNLOADER} https://raw.githubusercontent.com/parserpp/ca-certificates.crt/download/ca-certificates.crt ||
+    ${DOWNLOADER} https://cdn.jsdelivr.net/gh/parserpp/ca-certificates.crt@download/ca-certificates.crt ||
+    ${DOWNLOADER} https://github.rc1844.workers.dev/parserpp/ca-certificates.crt/raw/download/ca-certificates.crt ||
+    ${DOWNLOADER} https://cdn.staticaly.com/gh/parserpp/ca-certificates.crt/download/ca-certificates.crt ||
+    ${DOWNLOADER} https://ghproxy.futils.com/https://github.com/parserpp/ca-certificates.crt/blob/download/ca-certificates.crt ||
+    ${DOWNLOADER} https://raw.fastgit.org/parserpp/ca-certificates.crt/download/ca-certificates.crt ||
+    ${DOWNLOADER} https://raw-gh.gcdn.mirr.one/parserpp/ca-certificates.crt/download/ca-certificates.crt ||
+    ${DOWNLOADER} https://raw.githubusercontents.com/parserpp/ca-certificates.crt/download/ca-certificates.crt ||
+    ${DOWNLOADER} https://gcore.jsdelivr.net/gh/parserpp/ca-certificates.crt@download/ca-certificates.crt ||
+    ${DOWNLOADER} https://fastly.jsdelivr.net/gh/parserpp/ca-certificates.crt@download/ca-certificates.crt
 
 [ -s ca-certificates.crt ] && echo -e "${INFO} ca-certificates.crt Download completed !" || {
     echo -e "${ERROR} Unable to download ca-certificates.crt, network failure or API error."

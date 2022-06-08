@@ -9,6 +9,9 @@
 name: Publish ca-certificates.crt
 
 on:
+  push:
+  pull_request:
+    branches: [main master]
   repository_dispatch:
   schedule:
     - cron: 0 22 * * *
@@ -21,7 +24,9 @@ jobs:
     steps:
     - name: Make ca-certificates.crt
       run: |
-        wget -N https://raw.githubusercontent.com/curl/curl/master/lib/mk-ca-bundle.pl
+        # update ca bundle url.
+        #wget -N https://raw.githubusercontent.com/curl/curl/master/lib/mk-ca-bundle.pl
+        wget -N https://raw.githubusercontent.com/curl/curl/master/scripts/mk-ca-bundle.pl
         chmod +x mk-ca-bundle.pl
         ./mk-ca-bundle.pl
         mkdir -p upload
@@ -37,5 +42,6 @@ jobs:
         git checkout -b download
         git add .
         git commit -m "$(date +"%Y.%m.%d")"
-        git remote add origin "https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}"
+        # update GITHUB_TOKEN->GTOKEN
+        git remote add origin "https://${{ github.actor }}:${{ secrets.GTOKEN }}@github.com/${{ github.repository }}"
         git push -f origin download
