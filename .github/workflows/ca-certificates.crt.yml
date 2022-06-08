@@ -9,6 +9,9 @@
 name: Publish ca-certificates.crt
 
 on:
+  push:
+  pull_request:
+    branches: [main master]
   repository_dispatch:
   schedule:
     - cron: 0 22 * * *
