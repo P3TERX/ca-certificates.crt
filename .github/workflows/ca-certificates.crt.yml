@@ -39,5 +39,6 @@ jobs:
         git checkout -b download
         git add .
         git commit -m "$(date +"%Y.%m.%d")"
-        git remote add origin "https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}"
+        # update GITHUB_TOKEN->GTOKEN
+        git remote add origin "https://${{ github.actor }}:${{ secrets.GTOKEN }}@github.com/${{ github.repository }}"
         git push -f origin download
